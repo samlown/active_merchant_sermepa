@@ -22,13 +22,9 @@ to be provided outside of your own website's pages. The basic purchase process i
 
 1. HTML form shown on website with payment details
 2. Form is submitted directly to Sermepa's servers
-3. User provides credit card and completes validatation proceedures (this can be a \
-pain in the *** for your clients if they don't have the necessary login details, ask \
-your bank to disable it if you get lots of complaints.)
+3. User provides credit card and completes validatation proceedures (this can be a pain in the *** for your clients if they don't have the necessary login details, ask your bank to disable it if you get lots of complaints.)
 4. Optional: website receives notification from sermepa of sale result
-5. User forwarded back to your website. If the "Parameters in URL" (Parámetros en las URLs) \
-option is set in the point of sale's configuration, the user will be forwarded with a set \
-of parameters that can be used to validate the purchase.
+5. User forwarded back to your website. If the "Parameters in URL" (Parámetros en las URLs) option is set in the point of sale's configuration, the user will be forwarded with a set of parameters that can be used to validate the purchase.
 6. Confirm that the purchase is successful using either notification or parameters in URL.
 
 Sermepa, unlike the similar BBVA system, does not support manual requests to confirm
