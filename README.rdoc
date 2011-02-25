@@ -22,12 +22,12 @@ to be provided outside of your own website's pages. The basic purchase process i
 
 1. HTML form shown on website with payment details
 2. Form is submitted directly to Sermepa's servers
-3. User provides credit card and completes validatation proceedures (this can be a 
-pain in the *** for your clients if they don't have the necessary login details, ask
+3. User provides credit card and completes validatation proceedures (this can be a \
+pain in the *** for your clients if they don't have the necessary login details, ask \
 your bank to disable it if you get lots of complaints.)
 4. Optional: website receives notification from sermepa of sale result
-5. User forwarded back to your website. If the "Parameters in URL" (Parámetros en las URLs) 
-option is set in the point of sale's configuration, the user will be forwarded with a set
+5. User forwarded back to your website. If the "Parameters in URL" (Parámetros en las URLs) \
+option is set in the point of sale's configuration, the user will be forwarded with a set \
 of parameters that can be used to validate the purchase.
 6. Confirm that the purchase is successful using either notification or parameters in URL.
 
@@ -135,7 +135,7 @@ Special thanks go to {rentages.es}[http://www.rentages.es] for supporting the in
 
 Thanks should also go to {floresfrescas.com}[http://www.floresfrescas.com] for supporting the development of the BBVA TPV gateway method on which this is heavily based.
 
-And of course, many thanks to the ActiveMerchan[http://www.activemerchant.org] team.
+And of course, many thanks to the ActiveMerchant[http://www.activemerchant.org] Shopify[http://www.shopify.com] team for releasing this library in the first place!
 
 == License
 
