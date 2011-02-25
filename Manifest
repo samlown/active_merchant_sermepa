@@ -1,0 +1,15 @@
+CHANGELOG
+MIT-LICENSE
+Manifest
+README.rdoc
+Rakefile
+active_merchant_sermepa.gemspec
+lib/active_merchant/billing/integrations/sermepa.rb
+lib/active_merchant/billing/integrations/sermepa/helper.rb
+lib/active_merchant/billing/integrations/sermepa/notification.rb
+lib/active_merchant/billing/integrations/sermepa/return.rb
+lib/active_merchant_sermepa.rb
+test/test_helper.rb
+test/unit/integrations/helpers/sermepa_helper_test.rb
+test/unit/integrations/notifications/sermepa_notification_test.rb
+test/unit/integrations/sermepa_module_text.rb

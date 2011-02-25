@@ -1,0 +1,5 @@
+tmp/*
+nbproject
+.svn
+.DS_Store
+*.swp
