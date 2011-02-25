@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../../test_helper'
+require File.expand_path('../../../../test_helper', __FILE__)
 
 class SermepaNotificationTest < Test::Unit::TestCase
   include ActiveMerchant::Billing::Integrations
@@ -43,7 +43,7 @@ class SermepaNotificationTest < Test::Unit::TestCase
 
   private
   def raw_params_data
-    {       
+    {
       "Ds_AuthorisationCode" => "004022",
       "Ds_SecurePayment" => "1",
       "Ds_Hour" => "12:47",
@@ -59,6 +59,6 @@ class SermepaNotificationTest < Test::Unit::TestCase
       "Ds_Order" => "070820124150",
       "Ds_Amount" => "45",
       "Ds_Date" => "20/08/2007"
-    } 
-  end  
+    }
+  end
 end

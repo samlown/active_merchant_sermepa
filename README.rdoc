@@ -1,5 +1,162 @@
 = Active Merchant Sermepa Plugin
 
+Basic support for the Spanish SERMEPA Virtual POS payment gateway provided by Servired.
+Used by many banks in Spain and known locally as a "TPV Virtual".
+
+Include this library along with the standard active merchant package and a new
+Integration payment gateway will be available.
 
 
+== Install
 
+Add to your Gemfile as follows:
+
+    gem 'activemerchant_sermepa'
+
+That should automatically install a usable version of active merchant as a dependency.
+
+== Usage
+
+This is an integrated payment gateway and as such requires all credit card details
+to be provided outside of your own website's pages. The basic purchase process is:
+
+1. HTML form shown on website with payment details
+2. Form is submitted directly to Sermepa's servers
+3. User provides credit card and completes validatation proceedures (this can be a 
+pain in the *** for your clients if they don't have the necessary login details, ask
+your bank to disable it if you get lots of complaints.)
+4. Optional: website receives notification from sermepa of sale result
+5. User forwarded back to your website. If the "Parameters in URL" (Parámetros en las URLs) 
+option is set in the point of sale's configuration, the user will be forwarded with a set
+of parameters that can be used to validate the purchase.
+6. Confirm that the purchase is successful using either notification or parameters in URL.
+
+Sermepa, unlike the similar BBVA system, does not support manual requests to confirm
+the success of a sale. Validation must be done using the parameters received either
+from the notification or paremeters in forwarded URL.
+
+
+=== Configuration
+
+Your bank should provide you with three keys, known as the "terminal id", "commercial id",
+and "secret key". These when combined allow requests to be signed and incoming confirmations
+to be validated. A final option is available to set the the type of key used in the
+transactions. The "key type" can be set to either "sha1_complete" or "sha1_extended 
+according to whatever is set by your bank.
+
+These configuration options can either be set globally or on a per-request basis. The
+following would be included in an initializer to prepare the gateway for use:
+
+    ActiveMerchant::Billing::Integrations::Sermepa::Helper.credentials = {
+      :terminal_id   => '9',
+      :commercial_id => ''999008881,
+      :secret_key    => 'qwertyasdf0123456789',
+      :key_type      => 'sha1_complete'
+    }
+
+If the credentials are not set this way, they'll need to be included with each call to
+the library's methods.
+
+=== Form
+
+Active Merchant provides a helper called "payment_service_for" which handles the preparation
+of the request to the gateway. The following code sample shows what this might look like:
+
+    = payment_service_for @invoice.transactions.last.code, 'The Shop', :amount => @invoice.total.cents, :currency => 'EUR', :service => :sermepa do |service|
+      - service.description "Some description of the purchase"
+      - service.customer_name @invoice.client.name
+      - service.notify_url notify_invoice_url(@invoice)
+      - service.success_url complete_invoice_url(@invoice)
+      - service.failure_url complete_invoice_url(@invoice)
+
+      = submit_tag "Go to payment gateway!"
+
+A few important things to bare in mind:
+
+- Each request to the service *must* have a unique transaction or order id. This is the first parameter provided to the helper.
+- If a purchase fails, the order id *must* be updated.
+- As per the Sermepa documentation the transaction id must be between 4 and 12 digits long and always start with 4 numbers.
+- The credentials can be provided in the ":credentials" option to the helper if preferred.
+- The URLs set where the user will be sent after the purchase.
+
+
+=== Notification and Confirmation
+
+While confirming the purchase is optional, it is highly recommended as it allows you
+to let the client know instantly that the transaction has completed successfully.
+
+If HTTP notification has been enabled in the Sermepa configuration, a private
+request will be sent from the gateway to your website confirming the success of
+the transaction. The notification URL can be provided either in the form's parameters
+or in the administrator configuration. You'll most likely not be able to test this
+during development on your local machine for obvious reasons.
+
+Ensuring that the parameters are provided from the returning user is much more
+convenient for testing and allows for an instant response to the user.
+
+Both types work using the same parameters in the URL so can be handled with the same method.
+
+Your controller might have a actions like in the following example:
+
+    # Receive a direct notification from the gateway
+    def notify
+      notify = ActiveMerchant::Billing::Integrations::Sermepa.notification(request.query_parameters)
+      if notify.acknowledge
+        # Do something useful
+      end
+      render :text => 'OK'
+    end
+
+    # Handle the incoming user
+    def confirm
+      notify = ActiveMerchant::Billing::Integrations::Sermepa.notification(request.query_parameters)
+      if notify.acknowledge
+        # do something useful
+        render :action => 'success'
+      else
+        render :action => 'failure'
+      end
+    end
+
+These examples are greatly simplified. It would be much better to handle these operations in
+a model and provide support for recording each event that takes place.
+
+The acknowledge method also accepts a hash of credentials should you prefer this
+to setting them globally. It checks to see if by combining the received parameters
+the same signature can be generated using our secret key. Assuming the operation
+successful and the signature is valid, the purchase will be successful.
+
+
+== Authors
+
+Written by Sam Lown.
+
+Special thanks go to {rentages.es}[http://www.rentages.es] for supporting the initial development.
+
+Thanks should also go to {floresfrescas.com}[http://www.floresfrescas.com] for supporting the development of the BBVA TPV gateway method on which this is heavily based.
+
+And of course, many thanks to the ActiveMerchan[http://www.activemerchant.org] team.
+
+== License
+
+Released under the MIT license.
+
+Copyright (c) 2010-2011 Samuel Lown
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.

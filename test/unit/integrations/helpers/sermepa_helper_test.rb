@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + '/../../../test_helper'
+require File.expand_path('../../../../test_helper', __FILE__)
 
 class SermepaHelperTest < Test::Unit::TestCase
   include ActiveMerchant::Billing::Integrations
-  
+
   def setup
     Sermepa::Helper.credentials = {
         :terminal_id => '9',
@@ -34,13 +34,13 @@ class SermepaHelperTest < Test::Unit::TestCase
     assert_field 'Ds_Merchant_TransactionType', '0'
     assert_field 'Ds_Merchant_MerchantName', 'Comercio Pruebas'
   end
-  
+
   def test_unknown_mapping
     assert_nothing_raised do
       @helper.company_address :address => '500 Dwemthy Fox Road'
     end
   end
-  
+
   def test_padding_on_order_id
     @helper.order = 101
     assert_field 'Ds_Merchant_Order', "0000101"

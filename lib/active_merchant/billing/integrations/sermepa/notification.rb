@@ -1,6 +1,4 @@
 # encoding: utf-8
-require 'nokogiri'
-
 module ActiveMerchant #:nodoc:
   module Billing #:nodoc:
     module Integrations #:nodoc:

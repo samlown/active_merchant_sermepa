@@ -1,15 +1,18 @@
 require 'rubygems'
-require 'rake'
-require 'echoe'
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
-Echoe.new('activemerchant_sermepa', '0.0.1') do |p|
-  p.description    = "Add support to ActiveMerchant for the Spanish Sermepa payment gateway"
-  p.url            = "http://github.com/samlown/active_merchant_sermepa"
-  p.author         = "Sam Lown"
-  p.email          = "me@samlown.com"
-  p.ignore_pattern = ["tmp/*", "script/*"]
-  p.runtime_dependencies = [
-    "activemerchant >=1.5.2"
-  ]
-  p.development_dependencies = []
+require 'rake'
+require 'rake/testtask'
+
+desc "Run the unit test suite"
+task :default => 'test:units'
+
+namespace :test do
+  Rake::TestTask.new(:units) do |t|
+    t.pattern = 'test/unit/**/*_test.rb'
+    t.ruby_opts << '-rubygems'
+    t.libs << 'test'
+    t.verbose = true
+  end
 end
