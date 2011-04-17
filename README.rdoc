@@ -11,7 +11,7 @@ Integration payment gateway will be available.
 
 Add to your Gemfile as follows:
 
-    gem 'activemerchant_sermepa'
+    gem 'active_merchant_sermepa'
 
 That should automatically install a usable version of active merchant as a dependency.
 
